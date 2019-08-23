@@ -1,0 +1,17 @@
+﻿@model EmployeeManager.ViewModels.HomeDetailsViewModel
+
+@{ 
+    ViewBag.Title = Model.pageTitle;
+    Layout = "../Shared/_Layout";
+}
+
+<h3>@Model.pageTitle</h3>
+<div>
+    Name : @Model.employee.Name
+</div>
+<div>
+    Email : @Model.employee.Email
+</div>
+<div>
+    Department : @Model.employee.Department
+</div>
