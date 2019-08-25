@@ -39,10 +39,12 @@ namespace EmployeeManager
             }
 
             app.UseStaticFiles();
-            app.UseMvc(route =>
-            {
-                route.MapRoute("default", "{controller=Home}/{action=Index}/{Id?}");
-            });
+            //app.UseMvc(route =>
+            //{
+            //    route.MapRoute("default", "{controller=Home}/{action=Index}/{Id?}");
+            //});
+
+            app.UseMvc();
 
             app.Run(async (context) =>
             {
