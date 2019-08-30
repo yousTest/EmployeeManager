@@ -4,21 +4,19 @@
     ViewBag.Title = "Index page";
 }
 
-<table>
-    <thead>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Department</th>
-    </thead>
-    <tbody>
-        @foreach (var employee in Model)
-        {
-            <tr>
-                <td>@employee.Id</td>
-                <td>@employee.Name</td>
-                <td>@employee.Department</td>
-            </tr>
-        }
-    </tbody>
-
-</table>
+<div class="card-deck">
+    @foreach (var employee in Model)
+    {
+        <div class="card m-3">
+            <div class="card-header">
+                <h3>@employee.Name</h3>
+            </div>
+            <img src="~/images/noimage.jpg" alt="no profile image" class="card-img-top"/>
+            <div class="card-footer text-center">
+                <a href="#" class="btn btn-primary">View</a>
+                <a href="#" class="btn btn-primary">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    }
+</div>
