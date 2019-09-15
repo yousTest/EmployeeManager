@@ -11,7 +11,7 @@
             <div class="card-header">
                 <h3>@employee.Name</h3>
             </div>
-            <img src="~/images/noimage.jpg" alt="no profile image" class="card-img-top"/>
+            <img src="~/images/noimage.jpg" alt="no profile image" class="card-img-top" asp-append-version="true"/>
             <div class="card-footer text-center">
                 <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id"
                    class="btn btn-primary">View</a>
