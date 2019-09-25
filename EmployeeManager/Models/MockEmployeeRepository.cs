@@ -19,6 +19,13 @@ namespace EmployeeManager.Models
             };
         }
 
+        public Employee AddEmployee(Employee employee)
+        {
+            employee.Id = _EmployeeList.Max(e => e.Id) + 1;
+            _EmployeeList.Add(employee);
+            return employee;
+        }
+
         public IEnumerable<Employee> GetAllEmployees()
         {
             return _EmployeeList;
