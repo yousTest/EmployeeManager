@@ -50,9 +50,9 @@
         <div>
             @RenderBody()
         </div>
-        @if (IsSectionDefined("Script"))
+        @if (IsSectionDefined("Scripts"))
         {
-            RenderSection("Script", required: true);
+            RenderSection("Scripts", required: true);
         }
     </div>
 </body>

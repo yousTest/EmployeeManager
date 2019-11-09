@@ -1,8 +1,10 @@
 ﻿using EmployeeManager.Models;
 using EmployeeManager.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,10 +14,12 @@ namespace EmployeeManager.Controllers
     public class HomeController : Controller
     {
         private IEmployeeRepository _employeeRepository;
+        private readonly IHostingEnvironment hostingEnvironment;
 
-        public HomeController(IEmployeeRepository employeeRepository)
+        public HomeController(IEmployeeRepository employeeRepository, IHostingEnvironment hostingEnvironment)
         {
             _employeeRepository = employeeRepository;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         [Route("~/Home")]
@@ -44,14 +48,39 @@ namespace EmployeeManager.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(HomeCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _employeeRepository.AddEmployee(employee);
-                return RedirectToAction("Details", new { id = employee.Id });
+                string uniqueFileName = null;
+                if (model.Photo != null)
+                {
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                    string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+                Employee newEmployee = new Employee()
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Department = model.Department,
+                    PhotoPath = uniqueFileName
+                };
+                _employeeRepository.AddEmployee(newEmployee);
+                return RedirectToAction("Details", new { id = newEmployee.Id });
             }
             return View();
+        }
+
+        public IActionResult Delete(int id)
+        {
+            Employee employeeToDelete = _employeeRepository.GetEmployee(id);
+            if (employeeToDelete !=null)
+            {
+                _employeeRepository.Delete(employeeToDelete);
+            }
+            return RedirectToAction("index");
         }
     }
 }
