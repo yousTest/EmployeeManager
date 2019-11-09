@@ -2,6 +2,7 @@
 
 @{ 
     ViewBag.Title = Model.pageTitle;
+    var photoPath = "~/images/" + (Model.employee.PhotoPath ?? "noimage.jpg");
 }
 
     <div class="row justify-content-center m-3">
@@ -11,7 +12,7 @@
                     <h1>@Model.employee.Name</h1>
                 </div>
                 <div class="card-body text-center">
-                    <img src="~/images/noimage.jpg" alt="no image" class="card-img-top" asp-append-version="true"/>
+                    <img src="@photoPath" alt="no image" class="card-img-top" asp-append-version="true"/>
                     <h4>Employee ID : @Model.employee.Id</h4>
                     <h4>Email: @Model.employee.Email</h4>
                     <h4>Department: @Model.employee.Department</h4>
@@ -20,7 +21,7 @@
                     <a asp-controller="home" asp-action="index" 
                        class="btn btn-primary">Back</a>
                     <a class="btn btn-primary" href="#">Edit</a>
-                    <a class="btn btn-danger" href="#">Delete</a>
+                    <a asp-controller="home" asp-action="Delete" asp-route-id="@Model.employee.Id"  class="btn btn-danger">Delete</a>
                 </div>
             </div>
 
@@ -28,6 +29,6 @@
 
     </div>
 
-@section Script{ 
+@section Scripts{ 
     <script src="~/js/CustomScript.js"></script>
 }
