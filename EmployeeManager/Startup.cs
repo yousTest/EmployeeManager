@@ -28,7 +28,7 @@ namespace EmployeeManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(
-                options => options.UseSqlServer(_config.GetConnectionString("EmployeeDBConnection")));
+                options => options.UseSqlServer(_config.GetConnectionString("EmployeeDataBaseConnection")));
 
             services.AddMvc().AddXmlSerializerFormatters();
             services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();

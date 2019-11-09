@@ -15,5 +15,20 @@ namespace EmployeeManager.Models
 
         public DbSet<Employee> Employees { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //just demo : you can do the seed in here, beter way to make een extension methode to seed the data
+            modelBuilder.Entity<Employee>().HasData(
+
+                new Employee
+                {
+                    Id = 3,
+                    Name = "me",
+                    Email = "me@gmail.com",
+                    Department = Dept.IT
+                });
+
+            modelBuilder.Seed();
+        }
     }
 }
