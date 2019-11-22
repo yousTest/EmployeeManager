@@ -46,7 +46,7 @@ namespace EmployeeManager.Controllers
             Employee employeeToDelete = _employeeRepository.GetEmployee(id);
             if (employeeToDelete != null)
             {
-                System.IO.File.Delete(hostingEnvironment.WebRootPath + "//images//" + employeeToDelete.PhotoPath);
+                System.IO.File.Delete(hostingEnvironment.WebRootPath + "/images/" + employeeToDelete.PhotoPath);
                 _employeeRepository.Delete(employeeToDelete);
             }
             return RedirectToAction("index");
@@ -63,18 +63,7 @@ namespace EmployeeManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = null;
-                if (model.Photo != null)
-                {
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
-                    string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    FileStream stream = new FileStream(filePath, FileMode.Create);
-                    using (stream)
-                    {
-                        model.Photo.CopyTo(stream);
-                    }
-                }
+                string uniqueFileName = ProcessPhoto(model);
                 Employee newEmployee = new Employee()
                 {
                     Name = model.Name,
@@ -87,6 +76,80 @@ namespace EmployeeManager.Controllers
             }
             return View();
         }
+
+
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Employee employee = _employeeRepository.GetEmployee(id);
+            HomeEditViewModel model = new HomeEditViewModel()
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Email = employee.Email,
+                Department = employee.Department,
+                ExistingPhotoPath = employee.PhotoPath
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(HomeEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Employee employee = _employeeRepository.GetEmployee(model.Id);
+                employee.Name = model.Name;
+                employee.Email = model.Email;
+                employee.Department = model.Department;
+                if (model.Photo != null)
+                {
+                    if (model.ExistingPhotoPath != null)
+                    {
+                        string filePath = Path.Combine(hostingEnvironment.WebRootPath + "/images/" + model.ExistingPhotoPath);
+                        System.IO.File.Delete(filePath);
+                    }
+                    employee.PhotoPath = ProcessPhoto(model);
+
+                }
+
+                _employeeRepository.Update(employee);
+                return RedirectToAction("Details", new { id = employee.Id });
+            }
+            return View(model);
+        }
+
+        private string ProcessPhoto(HomeCreateViewModel model)
+        {
+            string uniqueFileName = null;
+            if (model.Photo != null)
+            {
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Photo.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //for multiple files
         //public IActionResult Create(HomeCreateViewModel model)
