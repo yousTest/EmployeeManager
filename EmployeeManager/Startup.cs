@@ -39,7 +39,8 @@ namespace EmployeeManager
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+                //app.UseDeveloperExceptionPage();
             }
 
             app.UseStaticFiles();
@@ -50,10 +51,10 @@ namespace EmployeeManager
 
             app.UseMvc();
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!  " + _config["myKey"]);
-            });
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello World!  " + _config["myKey"]);
+            //});
         }
     }
 }
