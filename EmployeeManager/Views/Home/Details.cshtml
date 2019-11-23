@@ -2,26 +2,26 @@
 
 @{ 
     ViewBag.Title = Model.pageTitle;
-    var photoPath = "~/images/" + (Model.employee.PhotoPath ?? "noimage.jpg");
+    var photoPath = "~/images/" + (Model.Employee.PhotoPath ?? "noimage.jpg");
 }
 
     <div class="row justify-content-center m-3">
         <div class="col-sm-8">
             <div class="card">
                 <div class="card-header">
-                    <h1>@Model.employee.Name</h1>
+                    <h1>@Model.Employee.Name</h1>
                 </div>
                 <div class="card-body text-center">
                     <img src="@photoPath" alt="no image" class="card-img-top" asp-append-version="true"/>
-                    <h4>Employee ID : @Model.employee.Id</h4>
-                    <h4>Email: @Model.employee.Email</h4>
-                    <h4>Department: @Model.employee.Department</h4>
+                    <h4>Employee ID : @Model.Employee.Id</h4>
+                    <h4>Email: @Model.Employee.Email</h4>
+                    <h4>Department: @Model.Employee.Department</h4>
                 </div>
                 <div class="card-footer text-center">
                     <a asp-controller="home" asp-action="index" 
                        class="btn btn-primary">Back</a>
-                    <a class="btn btn-primary" asp-controller="home" asp-action="Edit" asp-route-id="@Model.employee.Id">Edit</a>
-                    <a asp-controller="home" asp-action="Delete" asp-route-id="@Model.employee.Id"  class="btn btn-danger">Delete</a>
+                    <a class="btn btn-primary" asp-controller="home" asp-action="Edit" asp-route-id="@Model.Employee.Id">Edit</a>
+                    <a asp-controller="home" asp-action="Delete" asp-route-id="@Model.Employee.Id"  class="btn btn-danger">Delete</a>
                 </div>
             </div>
 

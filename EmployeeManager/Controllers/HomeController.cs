@@ -31,12 +31,18 @@ namespace EmployeeManager.Controllers
         }
 
         [Route("{Id?}")]
-        public ViewResult Details(int? Id)
+        public ViewResult Details(int Id)
         {
+            Employee employee = _employeeRepository.GetEmployee(Id);
+            if (employee == null)
+            {
+                Response.StatusCode = 404;
+                return View("EmployeeNotFound", Id);
+            }
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
             {
-                pageTitle = "Details page",
-                employee = _employeeRepository.GetEmployee(Id ?? 1)
+                pageTitle = "Employee Details",
+                Employee = employee
             };
             return View(homeDetailsViewModel);
         }
@@ -46,7 +52,10 @@ namespace EmployeeManager.Controllers
             Employee employeeToDelete = _employeeRepository.GetEmployee(id);
             if (employeeToDelete != null)
             {
-                System.IO.File.Delete(hostingEnvironment.WebRootPath + "/images/" + employeeToDelete.PhotoPath);
+                if (employeeToDelete.PhotoPath != null)
+                {
+                    System.IO.File.Delete(hostingEnvironment.WebRootPath + "/images/" + employeeToDelete.PhotoPath);
+                }
                 _employeeRepository.Delete(employeeToDelete);
             }
             return RedirectToAction("index");
@@ -128,7 +137,7 @@ namespace EmployeeManager.Controllers
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
                 string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                
+
                 using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     model.Photo.CopyTo(fileStream);
