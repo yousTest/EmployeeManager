@@ -39,8 +39,13 @@ namespace EmployeeManager
         {
             if (env.IsDevelopment())
             {
-                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+                app.UseExceptionHandler("/Error");
+                //default exception handler middelware
                 //app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
             }
 
             app.UseStaticFiles();

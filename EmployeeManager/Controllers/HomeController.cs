@@ -33,6 +33,8 @@ namespace EmployeeManager.Controllers
         [Route("{Id?}")]
         public ViewResult Details(int Id)
         {
+            //for exception handeling 
+            //throw new Exception();
             Employee employee = _employeeRepository.GetEmployee(Id);
             if (employee == null)
             {
